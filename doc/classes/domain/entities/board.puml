@@ -1,0 +1,46 @@
+@startuml Board Entity Class Diagram
+
+!theme plain
+
+package "Domain Layer" {
+    package "Entities" {
+        class Board {
+            - board: List[List[StoneColor]]
+            - BOARD_SIZE: int = 8
+            
+            + __init__()
+            + put(row: int, col: int, color: StoneColor): void
+            + reverse(cells: List[Tuple[int, int]]): void
+            + getBoard(): List[List[StoneColor]]
+            + getCellState(row: int, col: int): StoneColor
+            + isEmpty(row: int, col: int): bool
+            + isValidPosition(row: int, col: int): bool
+            + getStoneCount(color: StoneColor): int
+            + isBoardFull(): bool
+            - _initializeBoard(): void
+            - _setInitialStones(): void
+        }
+        
+        note right of Board
+            8x8のオセロボード状態を管理
+            - 初期配置: 中央4マスに白黒2個ずつ
+            - StoneColorで状態管理
+            - 石を置く処理と裏返し処理を提供
+        end note
+    }
+    
+}
+
+Board --> "domain.value_objects.StoneColor" : uses
+
+note bottom of Board
+    関連サービス:
+    - ReversiRuleService: 合法手判定と裏返し計算
+    - GameJudgementService: ゲーム終了判定
+    
+    初期配置:
+    [3][3] = WHITE, [3][4] = BLACK
+    [4][3] = BLACK, [4][4] = WHITE
+end note
+
+@enduml

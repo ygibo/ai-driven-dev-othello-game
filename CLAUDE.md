@@ -42,6 +42,7 @@ The project uses:
 - **Language**: Python 3.10
 - **Virtual Environment**: `venv/` (already configured)
 - **Version Control**: Git with GitHub integration
+- **Testing Framework**: pytest (recommended)
 
 ## Common Commands
 
@@ -55,6 +56,75 @@ python src/main.py        # Main game (currently empty)
 python src/date.py        # Date utility program
 ```
 
+### Testing
+
+#### Running Tests
+```bash
+# Run all tests
+pytest
+
+# Run tests with verbose output
+pytest -v
+
+# Run specific test file
+pytest tests/unit/domain/entities/test_board.py
+
+# Run tests with coverage
+pytest --cov=src
+
+# Run tests for specific layer
+pytest tests/unit/domain/
+```
+
+#### Test Structure
+```
+tests/
+├── __init__.py
+├── unit/                 # Unit tests
+│   ├── __init__.py
+│   ├── domain/          # Domain layer tests
+│   │   ├── __init__.py
+│   │   ├── entities/    # Entity tests
+│   │   │   ├── __init__.py
+│   │   │   ├── test_board.py
+│   │   │   └── test_game.py
+│   │   ├── value_objects/ # Value object tests
+│   │   │   ├── __init__.py
+│   │   │   └── test_stone_color.py
+│   │   └── services/    # Domain service tests
+│   │       ├── __init__.py
+│   │       ├── test_game_judgement_service.py
+│   │       └── test_reversi_rule_service.py
+│   ├── application/     # Application layer tests
+│   │   ├── __init__.py
+│   │   └── services/
+│   │       ├── __init__.py
+│   │       └── test_game_play_service.py
+│   └── presentation/    # Presentation layer tests
+│       ├── __init__.py
+│       └── test_game_ui.py
+└── integration/         # Integration tests
+    ├── __init__.py
+    └── test_game_flow.py
+```
+
+#### Test Development Guidelines
+
+**Test Naming Convention:**
+- Test files: `test_<class_name>.py` (e.g., `test_board.py`)
+- Test methods: `test_<method_name>_<condition>` (e.g., `test_put_valid_position`)
+
+**Test Organization:**
+- Unit tests: Test individual classes/methods in isolation
+- Integration tests: Test component interactions
+- Follow the same directory structure as `src/`
+
+**Test-Driven Development:**
+1. Write failing tests first
+2. Implement minimal code to make tests pass
+3. Refactor while keeping tests green
+4. Maintain high test coverage (aim for >90%)
+
 ### Development Workflow
 
 #### Feature Development Flow
@@ -62,10 +132,14 @@ python src/date.py        # Date utility program
 # 1. Create and switch to feature branch
 git checkout -b feature/feature-name
 
-# 2. Implement the feature
-# ... make code changes ...
+# 2. Implement the feature with tests
+# ... write tests first (TDD) ...
+# ... implement code to make tests pass ...
 
-# 3. Commit changes
+# 3. Run tests to ensure quality
+pytest -v
+
+# 4. Commit changes
 git add .
 git commit -m "Add feature description
 
@@ -73,11 +147,11 @@ git commit -m "Add feature description
 
 Co-Authored-By: Claude <noreply@anthropic.com>"
 
-# 4. Push to remote and create pull request
+# 5. Push to remote and create pull request
 git push -u origin feature/feature-name
 gh pr create --title "Feature title" --body "Description of changes"
 
-# 5. After PR is merged, cleanup
+# 6. After PR is merged, cleanup
 git checkout main
 git pull origin main
 git branch -d feature/feature-name
@@ -163,7 +237,7 @@ src/
 - Follow onion architecture patterns when implementing new features
 - The project uses Japanese language for documentation and some code comments
 - Virtual environment is already set up - activate before development
-- No testing framework is currently configured
+- Testing framework: pytest (install with `pip install pytest pytest-cov`)
 - No build tools or dependency management files are present yet
 
 ## Key Implementation Tasks
