@@ -1,0 +1,30 @@
+@startuml StoneColor Value Object Class Diagram
+
+!theme plain
+
+package "Domain Layer" {
+    package "Value Objects" {
+        enum StoneColor {
+            EMPTY = 0
+            BLACK = 1
+            WHITE = 2
+            
+            + opposite(): StoneColor
+            + __str__(): str
+            + isPlayer(): bool
+        }
+        
+        note right of StoneColor
+            オセロの石の色を表す値オブジェクト
+            - EMPTY: 空のマス
+            - BLACK: 黒石（先手）
+            - WHITE: 白石（後手）
+            
+            メソッド:
+            - opposite(): 相手の色を返す
+            - isPlayer(): プレイヤーの石かどうか
+        end note
+    }
+}
+
+@enduml
